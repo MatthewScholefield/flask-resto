@@ -151,7 +151,8 @@ class Api:
                 out, code = {'error': 'Internal error', 'message': 'Server encountered an error'}, 500
             return json.dumps(out, indent=4) + '\n', code
 
-        self._get_app().add_url_rule(route, func.__qualname__, wrapper, methods=[method])
+        label = func.__qualname__ + '-' + str(id(func))
+        self._get_app().add_url_rule(route, label, wrapper, methods=[method])
 
     def _set_resource(self, path, data: dict):
         """Recursively build routes from nested dictionaries and register them with the app"""
