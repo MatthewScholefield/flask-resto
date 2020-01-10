@@ -1,4 +1,5 @@
 import flask
+import inspect
 import json
 import re
 import traceback
@@ -136,14 +137,14 @@ class Api:
 
         @wraps(func)
         def wrapper(*args, __f=func, **kwargs):
-            name = __f.__qualname__
-
+            args = list(args)
+            sig = inspect.getfullargspec(__f)
+            # If passing an unbound method, pass a dummy object to the self argument
+            if sig.args and sig.args[0] == 'self' and '__self__' not in dir(__f):
+                args.insert(0, type(__f.__qualname_, (object,), {})())
             try:
                 code = 200
-                if '.' in name:
-                    out = __f(type(name, (object,), {})(), *args, **kwargs)
-                else:
-                    out = __f(*args, **kwargs)
+                out = __f(*args, **kwargs)
             except HTTPException as e:
                 out, code = {'error': e.name, 'message': e.description}, e.code
             except BaseException as e:
