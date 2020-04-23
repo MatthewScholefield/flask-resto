@@ -13,35 +13,35 @@ Features Resto gives you:
  - Automatically generate and serve swagger documentation at root URL
  - Group functions however you want in classes and assign them to any route later:
 
-```
+```python
 class User:
-	def create(self):
-		...
-	
-	def get(self, uuid):
-		...
-	
-	def update(self, uuid):
-		...
-	
-	def signup(self):
-		...
-	
-	def login(self):
-		...
-	
-	def refresh_auth(self):
-		...
+    def create(self):
+        ...
+
+    def get(self, uuid):
+        ...
+
+    def update(self, uuid):
+        ...
+
+    def signup(self):
+        ...
+
+    def login(self):
+        ...
+
+    def refresh_auth(self):
+        ...
 
 
 api.resources = {
     '/v1': {
         '/user': {
             'POST': User.create,
-        	'/<user_uuid>': {
-        		'GET': User.get,
-				'PATCH': User.update
-			}
+            '/<user_uuid>': {
+                'GET': User.get,
+                'PATCH': User.update
+            }
         },
         '/auth': {
             '/signup': {'POST': User.signup},
